@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html  ng-app="mebcatApp">
+  <head>
+    <meta http-equiv="content-language" content="ru" />
+    <meta http-equiv="Content-Type" content="txt/html; charset=utf-8" />
+    <title>Каталог мебели</title>
+    <script type='text/javascript' src='/static/js/jquery-1.6.1.min.js' ></script>
+    <script src="static/js/angular.min.js"></script>
+    <script type='text/javascript' src='/static/js/jquery.prettyPhoto.js' ></script>
+    <link rel="stylesheet" href="/static/css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <link rel="shortcut icon" href="/static/mebcatalog.png" type="image/ico" />
+    <script>
+    var mebcatApp = angular.module('mebcatApp', []);
+    mebcatApp.controller('MenuCtrl', function($scope) {
+        $scope.menu=[%{arraycat}];
+    });
+    mebcatApp.controller('ThmbCtrl', ["$scope", "$timeout", function ($scope, $timeout) {
+        $scope.arrayhint = [%{arrayhint}];
+        $scope.arrayimg = [%{arrayimg}];
+        $scope.arraytitle = [%{arraytitle}];
+        $scope.prjpath = '%{prjpath}'
+        $scope.homedir = 'mebcatalog'
+        $scope.pretty = 'index'
+        if (%{show_photo}) {   // if showing photo need full path for images
+            $scope.homedir = '/mebprojects/';    // alias for Apachi, httpd-hosts.conf
+            //$scope.pretty = 'rel="prettyPhoto[prj_gal]"';
+            $scope.pretty = 'prettyPhoto[prj_gal]';
+        }
+        $timeout(function() {
+            $("[rel^='prettyPhoto']").prettyPhoto({
+             theme: 'light_rounded', /* pp_default / light_rounded / dark_rounded / light_square / dark_square / facebook */
+            });
+        });
+    }]);
+    $locationProvider.html5Mode(true);
+    </script>
+
+  </head>
+  <body>
+    <div id="leftblock">
+        <div id="menu" class='blockshd'>
+            <ul><li><a href="/">Главная</a></li><hr size="2">
+            <div class="mainmenu" ng-controller="MenuCtrl">
+                <li ng-repeat="i in [%{arrayhrefmenu}]"><a href="mebcatalog{{i}}">{{menu[$index]}}</a></li>
+            </div></ul>
+        </div>
+        <div id="logo" class='blockshd'>
+            <hr size="2"><div class="textsm">&copy andy-pro %{year}</div>
+        </div>
+    </div>
+    <div id="header" class='blockshd'>%{header}<hr size="2"></div>
+    <div id="content" ng-controller="ThmbCtrl">
+        <figure ng-repeat="i in [%{arrayhrefimg}]">
+            <a prettyp rel="{{pretty}}" href="{{homedir}}{{prjpath}}{{i}}">
+                <img class="blockshd" src="/mebprojects/{{prjpath}}{{arrayimg[$index]}}" title="{{arrayhint[$index]}}"></a>
+            <legend><a href="{{homedir}}{{prjpath}}{{i}}">{{arraytitle[$index]}}</a></legend>
+        </figure>
+    </div>
+  </body>
+</html>
