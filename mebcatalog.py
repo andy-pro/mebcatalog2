@@ -145,14 +145,6 @@ def mebcatalog(environ, start_response):
         #return view_main_page(environ, start_response)
 #-------------------------------------------------------------------------
 def render_404(environ, start_response):
-    # start_response('404 Not Found', [('Content-type', 'text/plain')])
-    # ret = ['404 Not Found\n']
-    # ret.extend(["%s: %s\n" % (key, value) for key, value in environ.iteritems()])
-    # ret.extend(["%s\n" % (value) for value in sys.path])
-    # ret.append('Current working directory = %s\n' % (os.getcwd()))
-    # ret.append('mod_wsgi.SCRIPT_FILENAME: = %s\n' % (environ['SCRIPT_FILENAME']))
-    # ret.append('__file__: = %s\n' % (os.path.dirname(__file__)))
-    # return ret
     start_response('404 Not Found', [('content-type','text/html')])
     return ["""<html><h1>404 Not Found</h1><p>That page is unknown.
 Return to the <a href="/">home page</a></p></html>"""]
